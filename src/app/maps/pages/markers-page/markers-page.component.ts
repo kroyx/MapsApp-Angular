@@ -41,7 +41,8 @@ export class MarkersPageComponent implements AfterViewInit, OnDestroy {
   createMarker(): void {
     if (!this.map) return;
 
-    const color = '#xxxxxx'.replace(/x/g, y => (Math.random() * 16 | 0).toString(16));
+    // const color = '#xxxxxx'.replace(/x/g, y => (Math.random() * 16 | 0).toString(16));
+    const color = this.getRandomColor();
     const coordsMarker = this.map!.getCenter();
     this.addMarker(coordsMarker, color);
   }
@@ -49,6 +50,7 @@ export class MarkersPageComponent implements AfterViewInit, OnDestroy {
   deleteMarker(index: number): void {
     this.markers[index].marker.remove();
     this.markers.splice(index, 1);
+    this.saveToLocalStorage();
   }
 
   flyToMarker(marker: Marker): void {
@@ -94,5 +96,10 @@ export class MarkersPageComponent implements AfterViewInit, OnDestroy {
     marker.on('dragend', (ev) => this.saveToLocalStorage());
     this.markers.push({ color, marker });
     this.saveToLocalStorage();
+  }
+
+  getRandomColor(): string {
+    const color = "hsl(" + Math.random() * 360 + ", 100%, 75%)";
+    return color;
   }
 }
